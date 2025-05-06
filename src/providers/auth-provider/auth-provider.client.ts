@@ -1,6 +1,7 @@
 "use client";
 
 import type { AuthProvider } from "@refinedev/core";
+import { handleLogin, handleLogout } from "@utils/authService";
 import Cookies from "js-cookie";
 
 const mockUsers = [
@@ -20,11 +21,12 @@ const mockUsers = [
 
 export const authProviderClient: AuthProvider = {
   login: async ({ email, username, password, remember }) => {
-    // Suppose we actually send a request to the back end here.
-    const user = mockUsers[0];
-
-    if (user) {
-      Cookies.set("auth", JSON.stringify(user), {
+    const userLogin = await handleLogin(username, password)
+    //const user = mockUsers[0];
+     console.log('handle log in', userLogin);
+     
+    if (userLogin) {
+      Cookies.set("auth", JSON.stringify(userLogin), {
         expires: 30, // 30 days
         path: "/",
       });
@@ -43,6 +45,12 @@ export const authProviderClient: AuthProvider = {
     };
   },
   logout: async () => {
+    const cookieAuth:any = Cookies.get('auth');
+    const {data} = JSON.parse(cookieAuth)
+    await handleLogout(data.email)
+
+    console.log('handle log out', data.email)
+
     Cookies.remove("auth", { path: "/" });
     return {
       success: true,

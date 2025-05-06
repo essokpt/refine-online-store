@@ -13,31 +13,38 @@
     "refine": "refine"
   },
   "dependencies": {
-    "@refinedev/cli": "^2.16.21",
-    "@refinedev/core": "^4.47.1",
-    "@refinedev/devtools": "^1.1.32",
-    "@refinedev/nextjs-router": "^6.0.0",
-    "@refinedev/kbar": "^1.3.6",
+    "@ant-design/icons": "^5.5.1",
+    "@ant-design/nextjs-registry": "^1.0.0",
+    "@refinedev/antd": "^5.46.1",
+    "@refinedev/cli": "^2.16.46",
+    "@refinedev/core": "^4.57.9",
+    "@refinedev/devtools": "^1.2.16",
+    "@refinedev/inferencer": "^5.0.3",
+    "@refinedev/kbar": "^1.3.16",
+    "@refinedev/nestjsx-crud": "^5.0.12",
+    "@refinedev/nextjs-router": "^6.2.3",
+    "@refinedev/react-hook-form": "^4.9.3",
+    "antd": "^5.17.0",
+    "antd-style": "^3.7.1",
+    "html5-qrcode": "^2.3.8",
+    "js-cookie": "^3.0.5",
+    "lodash": "^4.17.21",
     "next": "^14.1.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "@refinedev/nestjsx-crud": "^5.0.1",
-    "@refinedev/antd": "^5.44.0",
-    "@ant-design/icons": "^5.5.1",
-    "antd": "^5.17.0",
-    "js-cookie": "^3.0.5",
-    "@ant-design/nextjs-registry": "^1.0.0"
+    "react-infinite-scroll-component": "^6.1.0"
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
+    "@types/lodash": "^4.17.16",
+    "@types/node": "^18.16.2",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
-    "@types/node": "^18.16.2",
     "@typescript-eslint/parser": "^6.21.0",
-    "typescript": "^5.4.2",
     "cross-env": "^7.0.3",
     "eslint": "^8",
     "eslint-config-next": "^14.1.0",
-    "@types/js-cookie": "^3.0.6"
+    "typescript": "^5.4.2"
   },
   "refine": {
     "projectId": "d17S4z-ftiNuj-3Jy1UL"

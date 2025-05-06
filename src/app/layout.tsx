@@ -1,5 +1,5 @@
 import { DevtoolsProvider } from "@providers/devtools";
-import { useNotificationProvider } from "@refinedev/antd";
+import { ThemedLayoutV2, useNotificationProvider } from "@refinedev/antd";
 import { GitHubBanner, Refine } from "@refinedev/core";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 import routerProvider from "@refinedev/nextjs-router";
@@ -13,7 +13,19 @@ import { ColorModeContextProvider } from "@contexts/color-mode";
 import { authProviderClient } from "@providers/auth-provider/auth-provider.client";
 import { dataProvider } from "@providers/data-provider";
 import "@refinedev/antd/dist/reset.css";
-import { ConfigProvider } from "antd";
+import {
+  BlockOutlined,
+  CarOutlined,
+  ContactsFilled,
+  ContactsOutlined,
+  ContactsTwoTone,
+  HomeFilled,
+  ProductFilled,
+  RiseOutlined,
+  ShoppingFilled,
+  TagFilled,
+  UserOutlined,
+} from "@ant-design/icons";
 
 export const metadata: Metadata = {
   title: "Refine",
@@ -39,19 +51,6 @@ export default function RootLayout({
           {/* <GitHubBanner /> */}
           <RefineKbarProvider>
             <AntdRegistry>
-              {/* <ConfigProvider
-                theme={{
-                  components: {
-                   
-                    Slider: {
-                      colorBgLayout: "#1890ff",
-                      colorPrimaryBg: "#1890ff"
-                    },
-                 
-                  },
-                 
-                }}
-              > */}
               <ColorModeContextProvider defaultMode={defaultMode}>
                 <DevtoolsProvider>
                   <Refine
@@ -61,39 +60,140 @@ export default function RootLayout({
                     authProvider={authProviderClient}
                     resources={[
                       {
-                        name: "blog_posts",
-                        list: "/blog-posts",
-                        create: "/blog-posts/create",
-                        edit: "/blog-posts/edit/:id",
-                        show: "/blog-posts/show/:id",
+                        name: "Shop",
+                        meta: {
+                          icon: <ShoppingFilled />
+                        }
+                      },
+                      {
+                        name: "product",
+                        parentName: "Shop",
+                        list: "/product",
+                        create: "/product/create",
+                        edit: "/product/edit/:id",
+                        show: "/product/show/:id",
+                        meta: {
+                          canDelete: true,
+                          icon: <ProductFilled />,
+                        },
+                      },
+                      {
+                        parentName: "Shop",
+                        name: "productType",
+                        list: "/productType",
+                        create: "/productType/create",
+                        edit: "/productType/edit/:id",
+                        show: "/productType/show/:id",
+                        meta: {
+                          canDelete: true,
+                          icon: <TagFilled />,
+                        },
+                      },
+                      {
+                        parentName: "Shop",
+                        name: "category",
+                        list: "/category",
+                        create: "/category/create",
+                        edit: "/category/edit/:id",
+                        show: "/category/show/:id",
+                        meta: {
+                          canDelete: true,
+                          icon: <TagFilled />,
+                        },
+                      },
+                      {
+                        name: "customer",
+                        list: "/customer",
+                        create: "/customer/create",
+                        edit: "/customer/edit/:id",
+                        show: "/customer/show/:id",
+                        meta: {
+                          canDelete: true,
+                          icon: <ContactsOutlined />,
+                        },
+                      },
+                      {
+                        name: "vender",
+                        list: "/vender",
+                        create: "/vender/create",
+                        edit: "/vender/edit/:id",
+                        show: "/vender/show/:id",
+                        meta: {
+                          canDelete: true,
+                          icon: <ContactsOutlined />,
+                        },
+                      },
+                      {
+                        name: "My Store",
+                      },
+                      {
+                        parentName: "My-Store",
+                        name: "stores",
+                        list: "/stores",
+                        create: "/stores/create",
+                        edit: "/stores/edit/:id",
+                        show: "/stores/show/:id",
+                        meta: {
+                          title: "List",
+                          icon: <HomeFilled />,
+                        },
+                      },
+                      {
+                        parentName: "My-Store",
+                        name: "store-type",
+                        list: "/store-type",
+                        create: "/store-type/create",
+                        edit: "/store-type/edit/:id",
+                        show: "/store-type/show/:id",
                         meta: {
                           canDelete: true,
                         },
                       },
                       {
-                        name: "categories",
-                        list: "/categories",
-                        create: "/categories/create",
-                        edit: "/categories/edit/:id",
-                        show: "/categories/show/:id",
+                        name: "Stock",
+                        meta: {
+                          icon: <BlockOutlined /> 
+                        }
+                      },
+                      {
+                        parentName: "Stock",
+                        name: "stock",
+                        list: "/stock",
+                        create: "/stock/create",
+                        edit: "/stock/edit/:id",
+                        show: "/stock/show/:id",
                         meta: {
                           canDelete: true,
+                          icon: <RiseOutlined/>
+                        },
+                      },
+                      {
+                      
+                        name: "pos",
+                        list: "/pos",
+                        create: "/stock/create",
+                        edit: "/stock/edit/:id",
+                        show: "/stock/show/:id",
+                        meta: {
+                          canDelete: true,
+                          icon: <RiseOutlined/>
+                        },
+                      },
+                      {
+                      
+                        name: "order",
+                        list: "/order",
+                        create: "/order/create",
+                        edit: "/order/edit/:id",
+                        show: "/order/show/:id",
+                        meta: {
+                          canDelete: true,
+                          icon: <RiseOutlined/>
                         },
                       },
                     ]}
-                    options={{
-                      syncWithLocation: true,
-                      warnWhenUnsavedChanges: true,
-                      useNewQueryKeys: true,
-                      projectId: "d17S4z-ftiNuj-3Jy1UL",
-                      title: {
-                        text: "Refine-online-store",
-                        icon: <AppIcon />,
-                      },
-                    }}
                   >
                     {children}
-                    {/* <RefineKbar /> */}
                   </Refine>
                 </DevtoolsProvider>
               </ColorModeContextProvider>

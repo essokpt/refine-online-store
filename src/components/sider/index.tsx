@@ -9,8 +9,8 @@ import {
   useLogout,
   useMenu,
   useWarnAboutChange,
+  Link,
 } from "@refinedev/core";
-//import { Link } from "react-router";
 import { type Sider, ThemedTitleV2 } from "@refinedev/antd";
 import { Layout as AntdLayout, Menu, Grid, theme, Button } from "antd";
 import {
@@ -25,7 +25,7 @@ const { useToken } = theme;
 
 export const CustomSider: typeof Sider = ({ render }) => {
   const { token } = useToken();
-  const [collapsed, setCollapsed] = useState<boolean>(false);
+  const [collapsed, setCollapsed] = useState<boolean>(false)
   const isExistAuthentication = useIsExistAuthentication();
   const { warnWhen, setWarnWhen } = useWarnAboutChange();
   const { mutate: mutateLogout } = useLogout();
@@ -79,8 +79,8 @@ export const CustomSider: typeof Sider = ({ render }) => {
             }}
             icon={icon ?? (isRoute && <UnorderedListOutlined />)}
           >
-            {label}
-            {/* {route ? <Link to={route || "/"}>{label}</Link> : label} */}
+           
+            {route ? <Link to={route || "/"}>{label}</Link> : label}
             {!collapsed && isSelected && (
               <div className="ant-menu-tree-arrow" />
             )}

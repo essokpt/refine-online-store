@@ -11,6 +11,7 @@ import {
   theme,
   Typography,
 } from "antd";
+import Cookies from "js-cookie";
 import React, { useContext } from "react";
 
 const { Text } = Typography;
@@ -25,8 +26,10 @@ type IUser = {
 export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   sticky = true,
 }) => {
+  const cookieAuth: any = Cookies.get("auth");
+  const { data: user} = JSON.parse(cookieAuth);
   const { token } = useToken();
-  const { data: user } = useGetIdentity<IUser>();
+ // const { data: user } = useGetIdentity<IUser>();
   const { mode, setMode } = useContext(ColorModeContext);
 
   const headerStyles: React.CSSProperties = {
