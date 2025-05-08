@@ -5,10 +5,11 @@
   "engines": {
     "node": ">=18.0.0"
   },
+
   "scripts": {
-    "dev": "cross-env NODE_OPTIONS=--max_old_space_size=4096 refine dev",
+    "dev" : "node server.js",
     "build": "refine build",
-    "start": "refine start",
+    "start": "node server.js",
     "lint": "next lint",
     "refine": "refine"
   },

@@ -1,14 +1,19 @@
 "use client";
+
+import dayjs from "dayjs";
 import React, { useState } from "react";
 import _ from "lodash";
 import {
   Create,
+  DateField,
   EditButton,
   useModalForm,
   useSelect,
 } from "@refinedev/antd";
 import {
   Button,
+  DatePicker,
+  DatePickerProps,
   Divider,
   Form,
   Input,
@@ -74,7 +79,7 @@ export default function StockCreate() {
 
   const handleScanResult = (result: string) => {
     setScanResult(result);
-    createFormProps.setFieldValue('code', result)
+    createFormProps.setFieldValue("code", result);
     console.log("Scanned QR code:", result);
   };
 
@@ -90,10 +95,14 @@ export default function StockCreate() {
     );
     values.product = productName?.label;
     values.quantity = Number(values.quantity);
+    values.mfg = dayjs(values.mfg).format('YYYY-MM-DDTHH:mm:ssZ')
+    values.exp = dayjs(values.exp).format('YYYY-MM-DDTHH:mm:ssZ')
 
     if (values.code == undefined) {
       values.key = count;
       values.code = uniCode;
+    
+
       console.log("New value", values);
       setDataSource([...dataSource, values]);
       setCount(count + 1);
@@ -104,6 +113,8 @@ export default function StockCreate() {
       const index = newData.findIndex((item) => values.code === item.code);
       const item = newData[index];
 
+     // item.mfg = dayjs(item.mfg).format('YYYY-MM-DDTHH:mm:ssZ')
+     // item.exp = dayjs(item.exp).format('YYYY-MM-DDTHH:mm:ssZ')
       newData.splice(index, 1, {
         ...item,
         ...values,
@@ -118,7 +129,7 @@ export default function StockCreate() {
     {
       title: "Product",
       dataIndex: "key",
-      width: "20%",
+     width : "300px",
       hidden: true,
     },
     {
@@ -144,14 +155,20 @@ export default function StockCreate() {
       dataIndex: "size",
     },
     {
-      title: "mfg",
+      title: "MFG",
       dataIndex: "mfg",
-      width: "12%",
+      width: "50%",
+      // render: (_, record) => (
+      //   <DateField value={record.mfg} />
+      // ),
     },
     {
-      title: "exp",
+      title: "EXP",
       dataIndex: "exp",
-      width: "12%",
+      width: "50%",
+      // render: (_, record) => (
+      //   <DateField style={{ width: "100px" }} value={ record.exp? dayjs(record.exp).format("DD-MM-YYYY") : null} />
+      // ),
     },
     {
       title: "lot",
@@ -191,6 +208,16 @@ export default function StockCreate() {
     setDataSource(newData);
   };
 
+  const onChangeMfgDate: DatePickerProps["onChange"] = (date, dateString) => {
+    //console.log(dayjs(date).format('YYYY-MM-DDTHH:mm:ssZ') );
+    createFormProps.setFieldValue("mfg", date);
+  };
+
+  const onChangeExpDate: DatePickerProps["onChange"] = (date, dateString) => {
+    //console.log(dayjs(date).format('YYYY-MM-DDTHH:mm:ssZ') );
+    createFormProps.setFieldValue("exp", date);
+  };
+
   const handleEdit = (data: DataType) => {
     // const newData = dataSource.filter((item) => item.key !== key);
     createModalShow();
@@ -202,9 +229,18 @@ export default function StockCreate() {
     createFormProps.setFieldValue("serialNumber", data.serialNumber);
     createFormProps.setFieldValue("code", data.code);
     createFormProps.setFieldValue("color", data.color);
+   // createFormProps.setFieldValue("mfg", data.mfg);
+    //createFormProps.setFieldValue("exp", data.exp);
+
     createFormProps.setFieldValue("size", data.size);
-    createFormProps.setFieldValue("mfg", data.mfg);
-    createFormProps.setFieldValue("exp", data.exp);
+    createFormProps.setFieldValue(
+      "mfg",
+      dayjs(data.mfg).format("YYYY-MM-DDTHH:mm:ssZ")
+    );
+    createFormProps.setFieldValue(
+      "exp",
+      dayjs(data.exp).format("YYYY-MM-DDTHH:mm:ssZ")
+    );
     createFormProps.setFieldValue("lot", data.lot);
     createFormProps.setFieldValue("quantity", Number(data.quantity));
     createFormProps.setFieldValue("unit", data.unit);
@@ -224,7 +260,6 @@ export default function StockCreate() {
             setScanResult(null);
             createModalShow();
             createFormProps.resetFields();
-
           }}
           type="primary"
         >
@@ -237,12 +272,14 @@ export default function StockCreate() {
         </Button>
       }
     >
-      
       <Table<DataType>
         rowClassName={() => "editable-row"}
         bordered
         dataSource={dataSource}
         columns={columns}
+        scroll={{
+          x: true,
+        }}
       />
 
       <Modal {...createModalProps} width={600}>
@@ -265,7 +302,7 @@ export default function StockCreate() {
               },
             ]}
           >
-            <Input readOnly />
+            <Input />
           </Form.Item>
           <Form.Item
             label="Product"
@@ -321,7 +358,7 @@ export default function StockCreate() {
             <Input />
           </Form.Item>
           <Form.Item
-            label={"size"}
+            label={"Size"}
             name={["size"]}
             rules={[
               {
@@ -332,7 +369,7 @@ export default function StockCreate() {
             <Input />
           </Form.Item>
           <Form.Item
-            label={"mfg"}
+            label={"MFG"}
             name={["mfg"]}
             rules={[
               {
@@ -340,10 +377,35 @@ export default function StockCreate() {
               },
             ]}
           >
+            {/* <DatePicker
+              format={{
+                format: "DD-MM-YYYY HH:mm:ss",
+                type: "mask",
+              }}
+              onChange={onChangeMfgDate}
+            /> */}
             <Input />
           </Form.Item>
           <Form.Item
-            label={"lot Number"}
+            label={"EXP"}
+            name={["exp"]}
+            rules={[
+              {
+                required: false,
+              },
+            ]}
+          >
+            {/* <DatePicker
+              format={{
+                format: "DD-MM-YYYY HH:mm:ss",
+                type: "mask",
+              }}
+              onChange={onChangeExpDate}
+            /> */}
+            <Input/>
+          </Form.Item>
+          <Form.Item
+            label={"Lot Number"}
             name={["lot"]}
             rules={[
               {
@@ -353,17 +415,7 @@ export default function StockCreate() {
           >
             <Input />
           </Form.Item>
-          <Form.Item
-            label={"exp"}
-            name={["exp"]}
-            rules={[
-              {
-                required: false,
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
+
           <Form.Item
             label={"quantity"}
             name={["quantity"]}

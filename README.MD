@@ -46,3 +46,6 @@ To learn more about **Refine**, please check out the [Documentation](https://ref
 ## License
 
 MIT
+
+  "dev": "cross-env NODE_OPTIONS=--max_old_space_size=4096 refine dev",
+

@@ -14,9 +14,7 @@ export default function ProductList ({ children }: PropsWithChildren) {
   const { replace } = useNavigation();
  // const { createUrl } = useNavigation();
 
-  const [view, setView] = useState<View>("table"
-   // (localStorage.getItem("product-view") as View) || "table",
-  );
+  const [view, setView] = useState<View>("table");
 
   const handleViewChange = (value: View) => {
     // remove query params (pagination, filters, etc.) when changing view

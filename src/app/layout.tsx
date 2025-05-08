@@ -54,6 +54,23 @@ export default function RootLayout({
               <ColorModeContextProvider defaultMode={defaultMode}>
                 <DevtoolsProvider>
                   <Refine
+                  options={{
+                    disableTelemetry:true,
+                    reactQuery:{
+                      clientConfig:{
+                        defaultOptions:{
+                          queries:{
+                            networkMode: "always"
+                          },
+                          mutations:{
+                            networkMode: "always"
+                          }
+                        }
+                      }
+                    }
+                  }
+
+                  }
                     routerProvider={routerProvider}
                     dataProvider={dataProvider}
                     notificationProvider={useNotificationProvider}

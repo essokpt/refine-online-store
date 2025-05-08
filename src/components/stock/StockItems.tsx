@@ -1,9 +1,9 @@
 import { Avatar, Badge, Flex, Table, Tag, Typography } from "antd";
 import { getUniqueListWithCount } from "../../utils/unique";
-import { NumberField, TagField } from "@refinedev/antd";
+import { DateField, NumberField, TagField } from "@refinedev/antd";
 import { IStock } from "@app/stock/type";
 import { BaseRecord } from "@refinedev/core";
-import { CheckCircleOutlined } from "@ant-design/icons";
+import { CalendarOutlined, CheckCircleOutlined } from "@ant-design/icons";
 
 type Props = {
   stock?: IStock | BaseRecord;
@@ -18,26 +18,27 @@ export const StockItems = ({ stock }: Props) => {
 
   return (
     <Table
+      style={{ width: "100%" }}
       dataSource={uniqueProducts}
       loading={!stock}
       pagination={false}
       scroll={{
         x: true,
       }}
-    //   footer={(products) => {
-    //     return (
-    //       <Flex justify="flex-end" gap={16}>
-    //         <Typography.Text>Total</Typography.Text>
-    //         <NumberField
-    //           value={products.reduce(
-    //             (acc, product) => acc + product.count * product.price,
-    //             0,
-    //           )}
-    //           options={{ style: "currency", currency: "USD" }}
-    //         />
-    //       </Flex>
-    //     );
-    //   }}
+      //   footer={(products) => {
+      //     return (
+      //       <Flex justify="flex-end" gap={16}>
+      //         <Typography.Text>Total</Typography.Text>
+      //         <NumberField
+      //           value={products.reduce(
+      //             (acc, product) => acc + product.count * product.price,
+      //             0,
+      //           )}
+      //           options={{ style: "currency", currency: "USD" }}
+      //         />
+      //       </Flex>
+      //     );
+      //   }}
     >
       {/* <Table.Column
         title="Product"
@@ -64,71 +65,58 @@ export const StockItems = ({ stock }: Props) => {
           );
         }}
       /> */}
-     <Table.Column
-        
-        title="Code"
-        dataIndex="code"
-        key="code"
-      />
-
-       <Table.Column
-        
-        title="product"
-        dataIndex={["product", "model"]}
-        key="product"
-      />
       <Table.Column
-        
-        title="serialNumber"
+        title="Product"
+        dataIndex={["product"]}
+        key="product"
+        width={"100%"}
+        render={(value) => (
+          <>
+            <Tag color={"green"} icon={<CheckCircleOutlined />}>
+              {`${value.model}`}
+            </Tag>
+            <span>{value.productName}</span>
+          </>
+        )}
+      />
+      <Table.Column title="Code" dataIndex="code" key="code" />
+
+      <Table.Column
+        title="Serial Number"
         dataIndex="serialNumber"
         key="serialNumber"
       />
+      <Table.Column title="color" dataIndex="color" key="color" />
+      <Table.Column title="Size" dataIndex="size" key="size" />
       <Table.Column
-        
-        title="color"
-        dataIndex="color"
-        key="color"
-      />
-       <Table.Column
-        
-        title="size"
-        dataIndex="size"
-        key="size"
-      />
-       <Table.Column
-        
-        title="mfg"
+        title="MFG"
         dataIndex="mfg"
         key="mfg"
+        width="60%"
+        render={(value) => <DateField value={value} />}
       />
-       <Table.Column
-        
-        title="exp"
+      <Table.Column
+        title="EXP"
         dataIndex="exp"
         key="exp"
+        render={(value) => (
+          <DateField style={{ width: "100px" }} value={value} />
+        )}
       />
-       <Table.Column
-        
-        title="lot"
-        dataIndex="lot"
-        key="lot"
-      />
-       <Table.Column
-        
+      <Table.Column title="Lot Number" dataIndex="lot" key="lot" />
+      <Table.Column
         title="Stock in value"
         dataIndex="stockInValue"
         key="stockInValue"
       />
-       <Table.Column
-        
+      <Table.Column
         title="Stock out value"
         dataIndex="stockOutValue"
         key="stockOutValue"
       />
-    <Table.Column
-        title="quantity"
+      <Table.Column
+        title="Quantity"
         dataIndex="quantity"
-        
         key="quantity"
         render={(value) => {
           return (
@@ -137,32 +125,24 @@ export const StockItems = ({ stock }: Props) => {
               style={{
                 whiteSpace: "nowrap",
               }}
-              
             />
           );
         }}
       />
-       <Table.Column
-        
-        title="unit"
-        dataIndex="unit"
-        key="unit"
-      />
-       <Table.Column
-        
+      <Table.Column title="Unit" dataIndex="unit" key="unit" />
+      <Table.Column
         title="Stock In"
         dataIndex={["stockIn", "storeName"]}
         key="stockIn"
         render={(value) => {
-            return (
-                
-                <Tag color={"orange"} icon={<CheckCircleOutlined/>}>
-                {value}
-              </Tag>
-            );
-          }}
+          return (
+            <Tag color={"orange"} icon={<CheckCircleOutlined />}>
+              {value}
+            </Tag>
+          );
+        }}
       />
-       {/* <Table.Column        
+      {/* <Table.Column        
         title="QR-Code"
         dataIndex={"qrCodeUrl"}
         key="qrCodeUrl"
@@ -172,7 +152,7 @@ export const StockItems = ({ stock }: Props) => {
           );
         }}
       /> */}
-       <Table.Column        
+      {/* <Table.Column        
         title="QR-Code"
         dataIndex={"qrCodeUrl"}
         key="qrCodeUrl"
@@ -190,28 +170,25 @@ export const StockItems = ({ stock }: Props) => {
              
             );
           }}
-      />
-       <Table.Column        
+      /> */}
+      <Table.Column
         title="BarCode"
         dataIndex={"barCodeUrl"}
         key="barCodeUrl"
         render={(_, record) => {
-            return (                
-              <Avatar            
-                shape="square"
-                style={{ width: 120 }}
-                  src={
-                    record.qrCodeUrl
-                      ? `http://127.0.0.1:3001/${record.barCodeUrl}`
-                      : null
-                  }
-              />
-             
-            );
-          }}
+          return (
+            <Avatar
+              shape="square"
+              style={{ width: 120 }}
+              src={
+                record.qrCodeUrl
+                  ? `http://127.0.0.1:3001/${record.barCodeUrl}`
+                  : null
+              }
+            />
+          );
+        }}
       />
-
-     
     </Table>
   );
 };
