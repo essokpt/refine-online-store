@@ -23,7 +23,7 @@ export const OrderItems = ({ order }: Props) => {
       loading={!order}
       pagination={false}
       scroll={{
-        x: true,
+        x: 1300,
       }}
       //   footer={(products) => {
       //     return (
@@ -69,11 +69,17 @@ export const OrderItems = ({ order }: Props) => {
         title="Product"
         dataIndex={["productItem", "product"]}
         key="productItem"
+        width={"30%"}
         render={(value) => {
           return (
-            <Tag color={"green"} icon={<CheckCircleOutlined />}>
-              {`${value.model} - ${value.productName}`}
-            </Tag>
+            <>
+            <p>
+              <Tag color={"green"} icon={<CheckCircleOutlined />}>
+                {`${value.model}`}
+              </Tag>
+            </p>
+            <span>{value.productName}</span>
+          </>
           );
         }}
       />

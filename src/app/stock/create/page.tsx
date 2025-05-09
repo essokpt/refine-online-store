@@ -12,6 +12,7 @@ import {
 } from "@refinedev/antd";
 import {
   Button,
+  Col,
   DatePicker,
   DatePickerProps,
   Divider,
@@ -19,6 +20,7 @@ import {
   Input,
   Modal,
   Popconfirm,
+  Row,
   Select,
   Space,
   Table,
@@ -27,6 +29,7 @@ import {
 import { IProduct } from "@app/product/interface";
 import { IStore } from "@app/stores/type";
 import BarcodeScanner from "@components/barCodeScanner";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 interface DataType {
   key: React.Key;
@@ -48,8 +51,7 @@ interface DataType {
 export default function StockCreate() {
   const [count, setCount] = useState(0);
   const [dataSource, setDataSource] = useState<DataType[]>([]);
-  const [scanResult, setScanResult] = useState<string | null>(null);
-  const [scanning, setscanning] = useState(false);
+
   const {
     modalProps: createModalProps,
     show: createModalShow,
@@ -77,14 +79,10 @@ export default function StockCreate() {
     optionLabel: (item) => `${item.storeName}`,
   });
 
-  const handleScanResult = (result: string) => {
-    setScanResult(result);
-    createFormProps.setFieldValue("code", result);
-    console.log("Scanned QR code:", result);
-  };
-
   const handleOnFinish = (values: any) => {
-    const uniCode = `${Date.now().toString()}-${count}`;
+    console.log("handleOnFinish", values);
+
+    const uniCode = `${Date.now().toString()}`;
     const storeName = selectStore?.options?.find(
       (item) => item.value == values.storeId
     );
@@ -95,26 +93,24 @@ export default function StockCreate() {
     );
     values.product = productName?.label;
     values.quantity = Number(values.quantity);
-    values.mfg = dayjs(values.mfg).format('YYYY-MM-DDTHH:mm:ssZ')
-    values.exp = dayjs(values.exp).format('YYYY-MM-DDTHH:mm:ssZ')
+    const newData = [...dataSource];
+    const index = newData.findIndex((item) => values.code === item.code);
+    console.log("find index", index);
 
-    if (values.code == undefined) {
+    if (index == -1) {
       values.key = count;
-      values.code = uniCode;
-    
+      values.code = values.code == undefined ? uniCode : values.code;
 
       console.log("New value", values);
       setDataSource([...dataSource, values]);
-      setCount(count + 1);
+      setCount((prev) => prev + 1);
     } else {
       console.log("Update value:", values);
 
-      const newData = [...dataSource];
-      const index = newData.findIndex((item) => values.code === item.code);
+      // const newData = [...dataSource];
+      // const index = newData.findIndex((item) => values.code === item.code);
       const item = newData[index];
 
-     // item.mfg = dayjs(item.mfg).format('YYYY-MM-DDTHH:mm:ssZ')
-     // item.exp = dayjs(item.exp).format('YYYY-MM-DDTHH:mm:ssZ')
       newData.splice(index, 1, {
         ...item,
         ...values,
@@ -129,74 +125,94 @@ export default function StockCreate() {
     {
       title: "Product",
       dataIndex: "key",
-     width : "300px",
       hidden: true,
     },
     {
       title: "Code",
       dataIndex: "code",
-      width: "22%",
+      width: "15%",
     },
     {
       title: "Product",
       dataIndex: "product",
-      width: "23%",
+      width: "40%",
     },
     {
-      title: "serialNumber",
+      title: "Serial Number",
       dataIndex: "serialNumber",
+      width: "25%",
     },
     {
-      title: "color",
+      title: "Color",
       dataIndex: "color",
+      width: "12%",
     },
     {
-      title: "size",
+      title: "Size",
       dataIndex: "size",
+      width: "20%",
     },
     {
       title: "MFG",
       dataIndex: "mfg",
-      width: "50%",
-      // render: (_, record) => (
-      //   <DateField value={record.mfg} />
-      // ),
+      width: "20%",
+      render: (_, record) =>
+        record.mfg ? dayjs(record.mfg).format("DD-MM-YYYY") : null,
     },
     {
       title: "EXP",
       dataIndex: "exp",
-      width: "50%",
-      // render: (_, record) => (
-      //   <DateField style={{ width: "100px" }} value={ record.exp? dayjs(record.exp).format("DD-MM-YYYY") : null} />
-      // ),
+      width: "20%",
+      render: (_, record) =>
+        record.exp ? dayjs(record.exp).format("DD-MM-YYYY") : null,
     },
     {
-      title: "lot",
+      title: "Lot Number",
       dataIndex: "lot",
+      width: "25%",
     },
     {
-      title: "quantity",
+      title: "Quantity",
       dataIndex: "quantity",
+      width: "15%",
     },
     {
-      title: "unit",
+      title: "Unit",
       dataIndex: "unit",
+      width: "10%",
     },
     {
       title: "Stock-In",
       dataIndex: "store",
+      minWidth: 100,
+      width: "20%",
     },
     {
       title: "operation",
       dataIndex: "operation",
+      fixed: "right",
+      width: 100,
       render: (_, record) => (
         <Space>
-          <EditButton onClick={() => handleEdit(record)} />
+          <Button
+            color="primary"
+            variant="solid"
+            shape="circle"
+            icon={<EditOutlined />}
+            onClick={() => handleEdit(record)}
+          />
+
+          {/* <EditButton onClick={() => handleEdit(record)} /> */}
           <Popconfirm
             title="Sure to delete?"
             onConfirm={() => handleDelete(record.key)}
           >
-            <a>Delete</a>
+            <Button
+              color="danger"
+              variant="solid"
+              shape="circle"
+              icon={<DeleteOutlined />}
+            />
           </Popconfirm>
         </Space>
       ),
@@ -209,7 +225,7 @@ export default function StockCreate() {
   };
 
   const onChangeMfgDate: DatePickerProps["onChange"] = (date, dateString) => {
-    //console.log(dayjs(date).format('YYYY-MM-DDTHH:mm:ssZ') );
+    //console.log(dayjs(date).format('DD-MM-YYYY') );
     createFormProps.setFieldValue("mfg", date);
   };
 
@@ -220,7 +236,7 @@ export default function StockCreate() {
 
   const handleEdit = (data: DataType) => {
     // const newData = dataSource.filter((item) => item.key !== key);
-    createModalShow();
+
     createFormProps.setFieldValue("key", data.key);
     createFormProps.setFieldValue("product", data.product);
     createFormProps.setFieldValue("productId", data.productId);
@@ -229,26 +245,30 @@ export default function StockCreate() {
     createFormProps.setFieldValue("serialNumber", data.serialNumber);
     createFormProps.setFieldValue("code", data.code);
     createFormProps.setFieldValue("color", data.color);
-   // createFormProps.setFieldValue("mfg", data.mfg);
-    //createFormProps.setFieldValue("exp", data.exp);
+    createFormProps.setFieldValue("mfg", data.mfg);
+    createFormProps.setFieldValue("exp", data.exp);
 
     createFormProps.setFieldValue("size", data.size);
-    createFormProps.setFieldValue(
-      "mfg",
-      dayjs(data.mfg).format("YYYY-MM-DDTHH:mm:ssZ")
-    );
-    createFormProps.setFieldValue(
-      "exp",
-      dayjs(data.exp).format("YYYY-MM-DDTHH:mm:ssZ")
-    );
+    // createFormProps.setFieldValue(
+    //   "mfg",
+    //   dayjs(data.mfg).format("YYYY-MM-DDTHH:mm:ssZ")
+    // );
+    // createFormProps.setFieldValue(
+    //   "exp",
+    //   dayjs(data.exp).format("YYYY-MM-DDTHH:mm:ssZ")
+    // );
     createFormProps.setFieldValue("lot", data.lot);
     createFormProps.setFieldValue("quantity", Number(data.quantity));
     createFormProps.setFieldValue("unit", data.unit);
     console.log("edit data:", data);
+
+    createModalShow();
   };
 
   const handleSubmit = () => {
     console.log("submit:", dataSource);
+    // values.exp = dayjs(values.exp).format("YYYY-MM-DDTHH:mm:ssZ");
+
     createForm?.onFinish?.(dataSource);
   };
 
@@ -257,7 +277,6 @@ export default function StockCreate() {
       headerButtons={
         <Button
           onClick={() => {
-            setScanResult(null);
             createModalShow();
             createFormProps.resetFields();
           }}
@@ -277,167 +296,187 @@ export default function StockCreate() {
         bordered
         dataSource={dataSource}
         columns={columns}
-        scroll={{
-          x: true,
-        }}
+        //style={{ minWidth: "100%"}}
+        scroll={{ x: 1800 }}
       />
 
-      <Modal {...createModalProps} width={600}>
+      <Modal {...createModalProps} width={650}  style={{ top: 10, height: "auto" }}  >
         <Divider />
-        <div>
+        {/* <div>
           <BarcodeScanner onScanSuccess={handleScanResult} />
-        </div>
+        </div> */}
 
         <Form
+        //  style={{ padding: 5, margin: 10 }} 
           form={createFormProps}
           onFinish={handleOnFinish}
           layout="vertical"
         >
-          <Form.Item
-            label={"Code"}
-            name={["code"]}
-            rules={[
-              {
-                required: false,
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Product"
-            name={["productId"]}
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Select
-              placeholder="Select a product"
-              style={{ width: 300 }}
-              {...selectProps}
-            />
-          </Form.Item>
-          <Form.Item
-            label={"Store"}
-            name={["storeId"]}
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Select
-              placeholder="Select a store"
-              style={{ width: 300 }}
-              {...selectStore}
-            />
-          </Form.Item>
-          <Form.Item
-            label={"Serial Number"}
-            name={["serialNumber"]}
-            rules={[
-              {
-                required: false,
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
+          <Row gutter={16}   >
+            <Col span={12}>
+              <Form.Item
+                label={"Code"}
+                name={["code"]}
+                rules={[
+                  {
+                    required: false,
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
 
-          <Form.Item
-            label={"color"}
-            name={["color"]}
-            rules={[
-              {
-                required: false,
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label={"Size"}
-            name={["size"]}
-            rules={[
-              {
-                required: false,
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label={"MFG"}
-            name={["mfg"]}
-            rules={[
-              {
-                required: false,
-              },
-            ]}
-          >
-            {/* <DatePicker
-              format={{
-                format: "DD-MM-YYYY HH:mm:ss",
-                type: "mask",
-              }}
-              onChange={onChangeMfgDate}
-            /> */}
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label={"EXP"}
-            name={["exp"]}
-            rules={[
-              {
-                required: false,
-              },
-            ]}
-          >
-            {/* <DatePicker
-              format={{
-                format: "DD-MM-YYYY HH:mm:ss",
-                type: "mask",
-              }}
-              onChange={onChangeExpDate}
-            /> */}
-            <Input/>
-          </Form.Item>
-          <Form.Item
-            label={"Lot Number"}
-            name={["lot"]}
-            rules={[
-              {
-                required: false,
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
+            <Col span={12}>
+              <Form.Item
+                label="Product"
+                name={["productId"]}
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Select
+                  placeholder="Select a product"
+                  style={{ width: "100%" }}
+                  {...selectProps}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label={"Store"}
+                name={["storeId"]}
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Select
+                  style={{ width: "100%" }}
+                  placeholder="Select a store"
+                  {...selectStore}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label={"Serial Number"}
+                name={["serialNumber"]}
+                rules={[
+                  {
+                    required: false,
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
 
-          <Form.Item
-            label={"quantity"}
-            name={["quantity"]}
-            rules={[
-              {
-                required: false,
-              },
-            ]}
-          >
-            <Input type="number" />
-          </Form.Item>
-          <Form.Item
-            label={"unit"}
-            name={["unit"]}
-            rules={[
-              {
-                required: false,
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
+            <Col span={12}>
+              <Form.Item
+                label={"Color"}
+                name={["color"]}
+                rules={[
+                  {
+                    required: false,
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label={"Size"}
+                name={["size"]}
+                rules={[
+                  {
+                    required: false,
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label={"MFG"}
+                name={["mfg"]}
+                rules={[
+                  {
+                    required: false,
+                  },
+                ]}
+              >
+                <DatePicker
+                  style={{ width: "100%" }}
+                  format={"DD-MM-YYYY"}
+                  onChange={onChangeMfgDate}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label={"EXP"}
+                name={["exp"]}
+                rules={[
+                  {
+                    required: false,
+                  },
+                ]}
+              >
+                <DatePicker
+                  style={{ width: "100%" }}
+                  format={"DD-MM-YYYY"}
+                  onChange={onChangeExpDate}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label={"Lot Number"}
+                name={["lot"]}
+                rules={[
+                  {
+                    required: false,
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+
+            <Col span={12}>
+              <Form.Item
+                label={"Quantity"}
+                name={["quantity"]}
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Input type="number" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label={"Unit"}
+                name={["unit"]}
+                rules={[
+                  {
+                    required: false,
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Divider/>
         </Form>
       </Modal>
     </Create>

@@ -32,6 +32,7 @@ import {
 } from "antd";
 import { useState } from "react";
 import { IStock } from "./type";
+import { StockTableColumnProducts } from "@components/stock/column-product";
 
 export default function StockList() {
   const { tableProps } = useTable({
@@ -56,13 +57,21 @@ export default function StockList() {
           <Table.Column dataIndex="createdAt" title={"Date"} render={(value) => <DateField value={value} format="LLL" />}/>
           <Table.Column dataIndex="code" title={"Code"} />
           <Table.Column
+          key="products"
+          dataIndex="products"
+          title={"Products"}
+          render={(_, record) => {
+            return <StockTableColumnProducts stock={record} />;
+          }}
+        />
+          {/* <Table.Column
             title={"Items List"}
             dataIndex="productItems"
             key="productItems"
             render={(products: IStock["productItems"]) => {
               return products?.length;
             }}
-          />
+          /> */}
           <Table.Column dataIndex="stockBy" title={"Stock By"} />
 
           <Table.Column dataIndex="note" title={"Remark"} />

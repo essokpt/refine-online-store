@@ -18,13 +18,10 @@ export const StockItems = ({ stock }: Props) => {
 
   return (
     <Table
-      style={{ width: "100%" }}
       dataSource={uniqueProducts}
       loading={!stock}
       pagination={false}
-      scroll={{
-        x: true,
-      }}
+      scroll={{ x: 1800 }}
       //   footer={(products) => {
       //     return (
       //       <Flex justify="flex-end" gap={16}>
@@ -69,12 +66,14 @@ export const StockItems = ({ stock }: Props) => {
         title="Product"
         dataIndex={["product"]}
         key="product"
-        width={"100%"}
+        width={"25%"}
         render={(value) => (
           <>
-            <Tag color={"green"} icon={<CheckCircleOutlined />}>
-              {`${value.model}`}
-            </Tag>
+            <p>
+              <Tag color={"green"} icon={<CheckCircleOutlined />}>
+                {`${value.model}`}
+              </Tag>
+            </p>
             <span>{value.productName}</span>
           </>
         )}
@@ -85,6 +84,7 @@ export const StockItems = ({ stock }: Props) => {
         title="Serial Number"
         dataIndex="serialNumber"
         key="serialNumber"
+        width={"12%"}
       />
       <Table.Column title="color" dataIndex="color" key="color" />
       <Table.Column title="Size" dataIndex="size" key="size" />
@@ -92,27 +92,28 @@ export const StockItems = ({ stock }: Props) => {
         title="MFG"
         dataIndex="mfg"
         key="mfg"
-        width="60%"
+        width="10%"
         render={(value) => <DateField value={value} />}
       />
       <Table.Column
         title="EXP"
         dataIndex="exp"
         key="exp"
-        render={(value) => (
-          <DateField style={{ width: "100px" }} value={value} />
-        )}
+        width="10%"
+        render={(value) => <DateField value={value} />}
       />
-      <Table.Column title="Lot Number" dataIndex="lot" key="lot" />
+      <Table.Column title="Lot Number" dataIndex="lot" key="lot" width="10%" />
       <Table.Column
         title="Stock in value"
         dataIndex="stockInValue"
         key="stockInValue"
+        width="10%"
       />
       <Table.Column
         title="Stock out value"
         dataIndex="stockOutValue"
         key="stockOutValue"
+        width="10%"
       />
       <Table.Column
         title="Quantity"
