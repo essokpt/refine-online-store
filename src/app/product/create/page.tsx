@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Create, getValueFromEvent, useForm } from "@refinedev/antd";
-import { Form, Input, Select, Upload } from "antd";
+import { Col, Form, Input, Row, Select, Upload } from "antd";
 import { useSelect } from "@refinedev/antd";
 import { ICategory, IProductType } from "../interface";
 import { PlusCircleFilled } from "@ant-design/icons";
@@ -51,7 +51,6 @@ export default function ProductCreatePage() {
     }
 
     onFinish?.(formData);
-    
   };
 
   const { selectProps } = useSelect<ICategory>({
@@ -59,7 +58,7 @@ export default function ProductCreatePage() {
     optionLabel: (item) => `${item.name}`,
   });
 
-  const { selectProps: selectType} = useSelect<IProductType>({
+  const { selectProps: selectType } = useSelect<IProductType>({
     resource: "productType",
     optionLabel: (item) => `${item.typeName}`,
   });
@@ -68,186 +67,212 @@ export default function ProductCreatePage() {
     <Create saveButtonProps={saveButtonProps}>
       {/* <input type="file" name="image"  onChange={handleChangeFile}  multiple/> */}
       <Form {...formProps} layout="vertical" onFinish={handleOnFinish}>
-        <Form.Item
-          label="Model"
-          name={["model"]}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Brand"
-          name={["brand"]}
-          rules={[
-            {
-              required: false,
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Product Name"
-          name={["productName"]}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Description"
-          name={["description"]}
-          rules={[
-            {
-              required: false,
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Product Type"
-          name={["productTypeId"]}
-          rules={[
-            {
-              required: false,
-            },
-          ]}
-        >
-          <Select
-            placeholder="Select a product Type"
-            style={{ width: 300 }}
-            {...selectType}
-          />
-        </Form.Item>
-        <Form.Item
-          label="Category"
-          name={["categoryId"]}
-          rules={[
-            {
-              required: false,
-            },
-          ]}
-        >
-          <Select
-            placeholder="Select a category"
-            style={{ width: 300 }}
-            {...selectProps}
-          />
-        </Form.Item>
-        <Form.Item
-          label="Price"
-          name={["price"]}
-          rules={[
-            {
-              required: false,
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Selling Price"
-          name={["sellingPrice"]}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="size"
-          name={["size"]}
-          rules={[
-            {
-              required: false,
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="weight"
-          name={["weight"]}
-          rules={[
-            {
-              required: false,
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Status"
-          name={["status"]}
-          rules={[
-            {
-              required: false,
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="remark"
-          name={["remark"]}
-          rules={[
-            {
-              required: false,
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
+        <Row gutter={16}>
+           <Col span={24}>
+            <Form.Item
+              label="Product Name"
+              name={["productName"]}
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              label="Model"
+              name={["model"]}
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              label="Brand"
+              name={["brand"]}
+              rules={[
+                {
+                  required: false,
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+          </Col>
+         
+          <Col span={24}>
+            <Form.Item
+              label="Description"
+              name={["description"]}
+              rules={[
+                {
+                  required: false,
+                },
+              ]}
+            >
+              <Input.TextArea rows={5}/>
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              label="Product Type"
+              name={["productTypeId"]}
+              rules={[
+                {
+                  required: false,
+                },
+              ]}
+            >
+              <Select
+                placeholder="Select a product Type"
+                style={{ width: "100%" }}
+                {...selectType}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              label="Category"
+              name={["categoryId"]}
+              rules={[
+                {
+                  required: false,
+                },
+              ]}
+            >
+              <Select
+                placeholder="Select a category"
+                style={{ width: "100%" }}
+                {...selectProps}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              label="Price"
+              name={["price"]}
+              rules={[
+                {
+                  required: false,
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              label="Selling Price"
+              name={["sellingPrice"]}
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              label="Size"
+              name={["size"]}
+              rules={[
+                {
+                  required: false,
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              label="Weight"
+              name={["weight"]}
+              rules={[
+                {
+                  required: false,
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              label="Status"
+              name={["status"]}
+              rules={[
+                {
+                  required: false,
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              label="Remark"
+              name={["remark"]}
+              rules={[
+                {
+                  required: false,
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+          </Col>
 
-        <Form.Item
-          label="Image"
-          rules={[
-            {
-              required: false,
-            },
-          ]}
-        >
-          <Form.Item
-            name="image"
-            valuePropName="fileList"
-            getValueFromEvent={getValueFromEvent}
-            noStyle
-          >
-            <Upload
-              name="image"
-              listType="picture-circle"
-              //fileList={fileList}
-              maxCount={10}
-              // onPreview={handlePreview}
-              onChange={handleFileChange}
-              multiple
+          <Col span={24}>
+            <Form.Item
+              label="Image"
+              rules={[
+                {
+                  required: false,
+                },
+              ]}
             >
-              <button style={{ border: 0, background: "none" }} type="button">
-                <PlusCircleFilled />
-                <div style={{ marginTop: 8 }}>Upload</div>
-              </button>
-            </Upload>
-            {/* <Upload.Dragger
-              name="file"
-            
-              listType="picture"
-              maxCount={5}
-              multiple
-            >
-              <p className="ant-upload-text">Drag & drop a file in this area</p>
-            </Upload.Dragger> */}
-          </Form.Item>
-        </Form.Item>
+              <Col span={24}>
+                <Form.Item
+                  name="image"
+                  valuePropName="fileList"
+                  getValueFromEvent={getValueFromEvent}
+                  noStyle
+                >
+                  <Upload
+                    name="image"
+                    listType="picture-circle"
+                    //fileList={fileList}
+                    maxCount={10}
+                    // onPreview={handlePreview}
+                    onChange={handleFileChange}
+                    multiple
+                  >
+                    <button
+                      style={{ border: 0, background: "none" }}
+                      type="button"
+                    >
+                      <PlusCircleFilled />
+                      <div style={{ marginTop: 8 }}>Upload</div>
+                    </button>
+                  </Upload>
+               
+                </Form.Item>
+              </Col>
+            </Form.Item>
+          </Col>
+        </Row>
       </Form>
     </Create>
   );

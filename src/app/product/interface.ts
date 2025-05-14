@@ -68,4 +68,5 @@ export interface IProductItem {
     stockIn: IStore
     product: IProduct
     productId: number
+    barCodeUrl: string
 }

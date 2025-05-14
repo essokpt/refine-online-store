@@ -14,17 +14,14 @@ import { authProviderClient } from "@providers/auth-provider/auth-provider.clien
 import { dataProvider } from "@providers/data-provider";
 import "@refinedev/antd/dist/reset.css";
 import {
+  BarcodeOutlined,
   BlockOutlined,
-  CarOutlined,
-  ContactsFilled,
   ContactsOutlined,
-  ContactsTwoTone,
   HomeFilled,
   ProductFilled,
   RiseOutlined,
   ShoppingFilled,
   TagFilled,
-  UserOutlined,
 } from "@ant-design/icons";
 
 export const metadata: Metadata = {
@@ -52,7 +49,7 @@ export default function RootLayout({
           <RefineKbarProvider>
             <AntdRegistry>
               <ColorModeContextProvider defaultMode={defaultMode}>
-                <DevtoolsProvider>
+               
                   <Refine
                   options={{
                     disableTelemetry:true,
@@ -177,11 +174,24 @@ export default function RootLayout({
                         name: "stock",
                         list: "/stock",
                         create: "/stock/create",
-                        edit: "/stock/edit/:id",
+                        edit: "/stock/print/:id",
                         show: "/stock/show/:id",
+                       // print: "/stock/print/:id",
                         meta: {
                           canDelete: true,
                           icon: <RiseOutlined/>
+                        },
+                      },
+                      {
+                        parentName: "Stock",
+                        name: "Barcode",
+                        list: "/barcode",
+                        //create: "/barcode/create",
+                       // edit: "/barcode/print/:id",
+                       // show: "/barcode/show/:id",
+                        meta: {
+                          canDelete: true,
+                          icon: <BarcodeOutlined/>
                         },
                       },
                       {
@@ -212,7 +222,7 @@ export default function RootLayout({
                   >
                     {children}
                   </Refine>
-                </DevtoolsProvider>
+               
               </ColorModeContextProvider>
               {/* </ConfigProvider> */}
             </AntdRegistry>
